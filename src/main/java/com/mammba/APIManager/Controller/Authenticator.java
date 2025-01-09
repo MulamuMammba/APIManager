@@ -9,6 +9,7 @@ import com.mammba.APIManager.Repository.EndpointsTable;
 import com.mammba.APIManager.Repository.UsersTable;
 import com.mammba.APIManager.Services.EmailValidate;
 import com.mammba.APIManager.Services.Generator;
+import com.mammba.APIManager.Services.PasswordEncrypt;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,23 +22,17 @@ import java.util.Map;
 @Controller
 public class Authenticator {
 
-    @GetMapping("/")
+    @GetMapping("/2")
     public ResponseEntity<Object> Test() {
-
-        String id = Generator.generateApiId();
-        String email = "hello@gmail.com";
-        Database.createAccountTable();
-        Database.createApiTable();
-        Database.createEndpointsTable();
-        EndpointsTable.insertEndpoint(new Endpoints("2",id,"mammba", "mhs/ds","post"));
-        UsersTable.createUser(new Users(email, null, "Muthu Muthu", null, null, null));
-        ApiTable.insertApi(new API(id,email,"Mr Api", null, "Https://hello.com/"));
-
+        String email = "hel5o@gmail.com";
+        PasswordEncrypt pe = new PasswordEncrypt();
+       UsersTable.createUser(new Users(email, pe.EncryptPassword("hello its me"), "Muthu Muthu", null, null, null));
+boolean test = pe.PasswordMatch("hello its me",UsersTable.getUserByEmail("hel5o@gmail.com").getPassword());
 
         Map<String, String> data = new HashMap<>();
-        data.put("Response From Users Table", UsersTable.getUserByEmail("hello@gmail.com").getName());
-        data.put("Response From API Table", ApiTable.getApiById(id).getBaseUrl());
-        data.put("Response From Endpoints Table",EndpointsTable.getEndpointById("2").getName());
+        data.put("Response From Users Table", UsersTable.getUserByEmail("hel5o@gmail.com").getPassword());
+        data.put("Response From Endpoints Table",EndpointsTable.getEndpointById("5").getName());
+        data.put("Does it match : ", Boolean.toString(test));
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 

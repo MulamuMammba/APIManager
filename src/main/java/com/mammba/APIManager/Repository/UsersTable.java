@@ -27,7 +27,26 @@ public class UsersTable {
         }
     }
 
-    public static Users getUserByEmail(String email) {
+    public static void deleteUser(String email) {
+        String deleteSQL = "DELETE FROM Users WHERE email = ?";
+
+        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+             PreparedStatement pstmt = conn.prepareStatement(deleteSQL)) {
+
+            pstmt.setString(1, email);
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Account deleted successfully with email: " + email);
+            } else {
+                System.out.println("No account found with the email: " + email);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error deleting account: " + e.getMessage());
+        }
+    }
+
+            public static Users getUserByEmail(String email) {
         String selectSQL = "SELECT * FROM Users WHERE email = ? LIMIT 1";
         Users user = new Users(null, null, null, null, null, null);
 

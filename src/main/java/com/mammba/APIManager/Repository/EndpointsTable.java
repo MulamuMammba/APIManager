@@ -4,6 +4,7 @@ import com.mammba.APIManager.Model.API;
 import com.mammba.APIManager.Model.Endpoints;
 
 import java.sql.*;
+import java.util.List;
 
 public class EndpointsTable {
 
@@ -16,7 +17,6 @@ public class EndpointsTable {
         try (Connection conn = DriverManager.getConnection(DATABASE_URL);
              PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
 
-//            pstmt.setInt(1, endpoint.getId());
             pstmt.setString(1, endpoint.getApiId());
             pstmt.setString(2, endpoint.getName());
             pstmt.setString(3, endpoint.getUrl());
@@ -28,28 +28,49 @@ public class EndpointsTable {
             System.out.println("Error inserting account: " + e.getMessage());
         }
     }
-
-    public static Endpoints getEndpointById(String id) {
-        String selectSQL = "SELECT * FROM Endpoints WHERE id = ? LIMIT 1";
-        Endpoints endpoint = new Endpoints("0", null, null, null, null);
+    public static void removeEndpointById(String id) {
+        String deleteSQL = "DELETE FROM Endpoints WHERE id = ?";
 
         try (Connection conn = DriverManager.getConnection(DATABASE_URL);
-             PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
-            pstmt.setString(1, id);
-            ResultSet rs = pstmt.executeQuery();
+             PreparedStatement pstmt = conn.prepareStatement(deleteSQL)) {
 
-            if (rs.next()) {
-                String apiId = rs.getString("apiId");
-                String name = rs.getString("name");
-                String url = rs.getString("url");
-                String method = rs.getString("method");
+            pstmt.setInt(1, Integer.parseInt(id));
+            int rowsAffected = pstmt.executeUpdate();
 
-                endpoint.AddEndpoint(id,apiId,name,url,method);
+            if (rowsAffected > 0) {
+                System.out.println("Endpoint with ID " + id + " removed successfully.");
+            } else {
+                System.out.println("No endpoint found with ID " + id + ".");
             }
         } catch (SQLException e) {
-            System.out.println("Error retrieving api: " + e.getMessage());
+            System.out.println("Error removing endpoint by ID: " + e.getMessage());
         }
+    }
 
-        return endpoint;
+    public static void removeEndpointByApiId(String apiId) {
+        String deleteSQL = "DELETE FROM Endpoints WHERE apiId = ?";
+
+        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+             PreparedStatement pstmt = conn.prepareStatement(deleteSQL)) {
+
+            pstmt.setString(1, apiId);
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Endpoint with ApiId " + apiId + " removed successfully.");
+            } else {
+                System.out.println("No endpoint found with ApiId " + apiId + ".");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error removing endpoint by ApiId: " + e.getMessage());
+        }
+    }
+
+
+    public static Endpoints getEndpointById(String id) {
+        return null;
+    }
+
+    public static List<Endpoints> getEndpointByUserEmail(String email) {
     }
 }

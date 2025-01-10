@@ -7,18 +7,20 @@ import com.mammba.APIManager.Services.Usecase.ApiUseCase;
 import com.mammba.APIManager.Services.Usecase.UsersUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class ApiController {
 
     Authentication auth = new Authentication();
 
-    @GetMapping("/api/list/{email}")
+    @GetMapping("/api/api/list/{email}")
     public ResponseEntity<Object> ApiList(@PathVariable String email) {
 
         if (EmailValidate.isValid(email)) {
@@ -28,7 +30,7 @@ public class ApiController {
 
     }
 
-    @GetMapping("/api/create/{email}/{name}")
+    @GetMapping("/api/api/create/{email}/{name}")
     public ResponseEntity<Object> CreateApi(@PathVariable String email, @PathVariable String name) {
 
         if (!EmailValidate.isValid(email)) {
@@ -41,7 +43,7 @@ public class ApiController {
 
     }
 
-    @GetMapping("/api/remove/{email}/{ApiId}")
+    @GetMapping("/api/api/remove/{email}/{ApiId}")
     public ResponseEntity<Object> RemoveApi(@PathVariable String email, @PathVariable String ApiId) {
 
         if (!EmailValidate.isValid(email)) {

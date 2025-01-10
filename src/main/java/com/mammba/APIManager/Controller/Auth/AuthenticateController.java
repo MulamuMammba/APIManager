@@ -47,32 +47,4 @@ public class AuthenticateController {
 
     }
 
-    @PostMapping("/register")
-    public String register(@RequestParam("username") String email, @RequestParam("surname") String password, @RequestParam("password") String name, @RequestParam("password") String surname, @RequestParam("password") String profession, @RequestParam("password") String phoneNum, Model model) {
-        Users user = new Users(email, password, name, surname, profession, phoneNum);
-
-        boolean response = auth.register(user);
-
-        return "login";
-
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
-    @PostMapping("/login")
-    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model, HttpSession session
-
-    ) {
-
-        return auth.login(email, password, session, model);
-    }
-
-    @GetMapping("/surname")
-    public String surname() {
-        return "surname";
-    }
-
 }

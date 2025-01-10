@@ -19,7 +19,7 @@ public class EndPointsController {
 
     Authentication auth = new Authentication();
 
-    @GetMapping("/api/list/{email}")
+    @GetMapping("/endpoint/list/{email}")
     public ResponseEntity<Object> ApiList(@PathVariable String email) {
 
         if (EmailValidate.isValid(email)) {

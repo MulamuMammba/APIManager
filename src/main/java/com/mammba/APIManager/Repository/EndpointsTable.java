@@ -1,6 +1,5 @@
 package com.mammba.APIManager.Repository;
 
-import com.mammba.APIManager.Model.API;
 import com.mammba.APIManager.Model.Endpoints;
 
 import java.sql.*;
@@ -71,6 +70,7 @@ public class EndpointsTable {
         return null;
     }
 
-    public static List<Endpoints> getEndpointByUserEmail(String email) {
+    public static List<Endpoints> getEndpointByUserEmail(String ApiId) {
+        return null;
     }
 }

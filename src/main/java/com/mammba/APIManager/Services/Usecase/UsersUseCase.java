@@ -7,11 +7,11 @@ import com.mammba.APIManager.Services.PasswordEncrypt;
 public class UsersUseCase {
     static PasswordEncrypt security = new PasswordEncrypt();
 
-    public static void createUser(String email, String password, String name, String surname) {
+    public static void createUser(String email, String password, String name, String surname, String profession, String phoneNum) {
 
         String securePassword = security.EncryptPassword(password);
 
-        Users user = new Users(email, securePassword, name, surname, null, null);
+        Users user = new Users(email, securePassword, name, surname, profession, phoneNum);
 
         UsersTable.createUser(user);
 
@@ -26,5 +26,11 @@ public class UsersUseCase {
         Users user = UsersTable.getUserByEmail(email);
 
         return !(user.getName() == null);
+    }
+
+    public static void createUser(Users user) {
+        user.setPassword(security.EncryptPassword(user.getPassword()));
+
+        UsersTable.createUser(user);
     }
 }

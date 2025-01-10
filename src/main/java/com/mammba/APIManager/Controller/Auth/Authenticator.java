@@ -1,14 +1,9 @@
-package com.mammba.APIManager.Controller;
+package com.mammba.APIManager.Controller.Auth;
 
-import com.mammba.APIManager.Model.API;
-import com.mammba.APIManager.Model.Endpoints;
 import com.mammba.APIManager.Model.Users;
-import com.mammba.APIManager.Repository.ApiTable;
-import com.mammba.APIManager.Repository.Database;
 import com.mammba.APIManager.Repository.EndpointsTable;
 import com.mammba.APIManager.Repository.UsersTable;
 import com.mammba.APIManager.Services.EmailValidate;
-import com.mammba.APIManager.Services.Generator;
 import com.mammba.APIManager.Services.PasswordEncrypt;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,26 +31,7 @@ boolean test = pe.PasswordMatch("hello its me",UsersTable.getUserByEmail("hel5o@
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
-    @GetMapping("/test/{email}")
-    public ResponseEntity<Object> Test(@PathVariable String email) {
 
-        if (EmailValidate.isValid(email)){
-            Users user = UsersTable.getUserByEmail(email);
-
-            if (user.getName() == null){
-                return new ResponseEntity<>("User with the Email not found", HttpStatus.OK);
-            }else {
-                Map<String, String> data = new HashMap<>();
-                data.put("email", user.getEmail());
-                data.put("name", user.getName());
-                return new ResponseEntity<>(data, HttpStatus.OK);
-            }
-
-        }else {
-            return new ResponseEntity<>("Invalid email address", HttpStatus.OK);
-        }
-
-    }
     @GetMapping("/test2/{api}")
     public ResponseEntity<Object> Test2(@PathVariable String email) {
 

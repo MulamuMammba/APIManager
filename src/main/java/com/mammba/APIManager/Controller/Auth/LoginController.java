@@ -1,24 +1,25 @@
 package com.mammba.APIManager.Controller.Auth;
 
+import com.mammba.APIManager.Model.DTO.LoginRequest;
 import com.mammba.APIManager.Model.Users;
 import com.mammba.APIManager.Repository.UsersTable;
-import com.mammba.APIManager.Services.EmailValidate;
+import com.mammba.APIManager.Services.Security.EmailValidate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class LoginController {
 
     Authentication auth = new Authentication();
 
-    @GetMapping("/login/{email}/{password}")
-    public ResponseEntity<Object> login(@PathVariable String email, @PathVariable String password) {
+    @PostMapping("/api/v1/auth/login")
+    public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
+
+        String email = loginRequest.getEmail();
+        String password = loginRequest.getPassword();
 
         if (!EmailValidate.isValid(email)) {
             return new ResponseEntity<>("Invalid email address", HttpStatus.FORBIDDEN);
@@ -26,13 +27,11 @@ public class LoginController {
             Users user = UsersTable.getUserByEmail(email);
 
             if (user.getName() == null) {
-                return new ResponseEntity<>("User with the Email not found", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("Incorrect Password or Email", HttpStatus.NOT_FOUND);
             } else {
                 if (auth.login(email, password)) {
-                    Map<String, Users> data = new HashMap<>();
-                    data.put("User", user);
-                    return new ResponseEntity<>(data, HttpStatus.OK);
-                } else return new ResponseEntity<>("Invalid Password or Email", HttpStatus.UNAUTHORIZED);
+                    return new ResponseEntity<>(Map.of("token", email), HttpStatus.OK);
+                } else return new ResponseEntity<>("Incorrect Password or Email", HttpStatus.UNAUTHORIZED);
 
             }
         }

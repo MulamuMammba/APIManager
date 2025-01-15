@@ -2,9 +2,8 @@ package com.mammba.APIManager.Controller.Auth;
 
 import com.mammba.APIManager.Model.Users;
 import com.mammba.APIManager.Repository.UsersTable;
-import com.mammba.APIManager.Services.PasswordEncrypt;
+import com.mammba.APIManager.Services.Security.PasswordEncrypt;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.security.core.parameters.P;
 import org.springframework.ui.Model;
 
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package com.mammba.APIManager.Services;
+package com.mammba.APIManager.Services.Security;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

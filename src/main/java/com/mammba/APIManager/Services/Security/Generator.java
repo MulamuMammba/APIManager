@@ -1,4 +1,4 @@
-package com.mammba.APIManager.Services;
+package com.mammba.APIManager.Services.Security;
 
 import java.util.Random;
 

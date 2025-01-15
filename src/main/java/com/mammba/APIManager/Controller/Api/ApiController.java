@@ -1,63 +1,65 @@
 package com.mammba.APIManager.Controller.Api;
 
-import com.mammba.APIManager.Controller.Auth.Authentication;
 import com.mammba.APIManager.Model.API;
-import com.mammba.APIManager.Services.EmailValidate;
+import com.mammba.APIManager.Services.Security.EmailValidate;
 import com.mammba.APIManager.Services.Usecase.ApiUseCase;
 import com.mammba.APIManager.Services.Usecase.UsersUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class ApiController {
 
-    Authentication auth = new Authentication();
+    @PostMapping("/api/v1/api/list")
+    public ResponseEntity<Object> ApiList(@RequestBody Map<String, String> requestBody) {
+        String email = requestBody.get("email");
 
-    @GetMapping("/api/api/list/{email}")
-    public ResponseEntity<Object> ApiList(@PathVariable String email) {
+        if (email == null || !EmailValidate.isValid(email)) {
+            return new ResponseEntity<>("Invalid email", HttpStatus.BAD_REQUEST);
+        }
 
-        if (EmailValidate.isValid(email)) {
+        if (!UsersUseCase.UserExists(email)) {
+            return new ResponseEntity<>("User doesn't exist or doesn't have permission", HttpStatus.FORBIDDEN);
+        } else {
+
             List<API> api = ApiUseCase.apiList(email);
             return new ResponseEntity<>(api, HttpStatus.OK);
-        } else return new ResponseEntity<>("Invalid Password or Email", HttpStatus.OK);
-
-    }
-
-    @GetMapping("/api/api/create/{email}/{name}")
-    public ResponseEntity<Object> CreateApi(@PathVariable String email, @PathVariable String name) {
-
-        if (!EmailValidate.isValid(email)) {
-            return new ResponseEntity<>("Invalid Password or Email", HttpStatus.OK);
-
-        } else {
-            ApiUseCase.CreateApi(email, name);
-            return new ResponseEntity<>("Successful", HttpStatus.OK);
         }
-
     }
 
-    @GetMapping("/api/api/remove/{email}/{ApiId}")
-    public ResponseEntity<Object> RemoveApi(@PathVariable String email, @PathVariable String ApiId) {
+    // POST endpoint to create an API
+    @PostMapping("/api/v1/api/create")
+    public ResponseEntity<Object> CreateApi(@RequestBody API api) {
+        String userEmail = api.getUserEmail(); // Extract email from API object
 
-        if (!EmailValidate.isValid(email)) {
-            return new ResponseEntity<>("Invalid Email", HttpStatus.OK);
-        } else if (!UsersUseCase.UserExists(email)) {
-            return new ResponseEntity<>("User does not exist", HttpStatus.OK);
-
-        } else if (!ApiUseCase.ApiExists(ApiId)) {
-            return new ResponseEntity<>("Api Does not exist", HttpStatus.OK);
+        if (!EmailValidate.isValid(userEmail)) {
+            return new ResponseEntity<>("Invalid Email", HttpStatus.BAD_REQUEST);
+        } else if (!UsersUseCase.UserExists(userEmail)) {
+            return new ResponseEntity<>("User doesn't have permission to create API", HttpStatus.FORBIDDEN);
         } else {
-            return new ResponseEntity<>("Successful", HttpStatus.OK);
+            ApiUseCase.CreateApi(api);
+            return new ResponseEntity<>("API created successfully", HttpStatus.OK);
         }
-
     }
 
+    // POST endpoint to remove an API
+    @PostMapping("/api/v1/api/remove")
+    public ResponseEntity<Object> RemoveApi(@RequestBody API api) {
+        String userEmail = api.getUserEmail(); // Extract email from API object
 
+        if (!UsersUseCase.UserExists(userEmail)) {
+            return new ResponseEntity<>("User does not exist", HttpStatus.FORBIDDEN);
+        } else {
+            ApiUseCase.RemoveApi(api.getId()); // Remove API
+            return new ResponseEntity<>("API removed successfully", HttpStatus.OK);
+        }
+    }
 }

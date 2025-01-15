@@ -2,7 +2,7 @@ package com.mammba.APIManager.Services.Usecase;
 
 import com.mammba.APIManager.Model.Users;
 import com.mammba.APIManager.Repository.UsersTable;
-import com.mammba.APIManager.Services.PasswordEncrypt;
+import com.mammba.APIManager.Services.Security.PasswordEncrypt;
 
 public class UsersUseCase {
     static PasswordEncrypt security = new PasswordEncrypt();

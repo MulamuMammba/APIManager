@@ -9,20 +9,16 @@ import java.util.List;
 
 public class EndPointUseCase {
 
-    public static List<Endpoints> EndPointList(String email) {
-        return EndpointsTable.getEndpointByUserEmail(email);
+    public static List<Endpoints> EndPointList(String ApiId) {
+
+        return EndpointsTable.getEndpointByApiId(ApiId);
     }
 
-    public static boolean EpiExists(String EndPointId) {
-        Endpoints endpoint = EndpointsTable.getEndpointById(EndPointId);
-
-        assert endpoint != null;
-        return !(endpoint.getName() == null);
+    public static Endpoints GetEndPointById(String id){
+        return EndpointsTable.getEndpointById(id);
     }
-
-    public static void CreateEndPoint(String email, String name) {
-        API api = new API(null, email, name, null, null);
-        ApiTable.insertApi(api);
+    public static void CreateEndPoint(Endpoints endpoint) {
+        EndpointsTable.insertEndpoint(endpoint);
 
     }
     public static void RemoveEndpoint(String EndPointId){
@@ -31,5 +27,6 @@ public class EndPointUseCase {
     public static void RemoveAllApiEndpoint(String ApiId){
         EndpointsTable.removeEndpointByApiId(ApiId);
     }
+
 
 }

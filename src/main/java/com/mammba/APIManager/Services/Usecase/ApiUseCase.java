@@ -4,6 +4,7 @@ import com.mammba.APIManager.Model.API;
 import com.mammba.APIManager.Repository.ApiTable;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ApiUseCase {
 
@@ -17,8 +18,7 @@ public class ApiUseCase {
         return !(api.getName() == null);
     }
 
-    public static void CreateApi(String email, String name) {
-        API api = new API(null, email, name, null, null);
+    public static void CreateApi(API api) {
         ApiTable.insertApi(api);
 
     }
@@ -36,4 +36,21 @@ public class ApiUseCase {
 
         ApiTable.removeUserByApi(email);
     }
+
+    private static API FetchApi(API api) {
+        return ApiTable.getApiById(api.getId());
+    }
+    public static API FetchApi(String apiId) {
+        return ApiTable.getApiById(apiId);
+    }
+
+    public static API FetchApiById(API api) {
+        API savedApi = FetchApi(api);
+
+        if (Objects.equals(savedApi.getUserEmail(), api.getUserEmail())) {
+            return savedApi;
+        } else return new API(null, null, null, null, null);
+
+    }
+
 }

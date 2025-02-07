@@ -1,5 +1,8 @@
 # MulamuMammba API Manager
 
+![1](https://github.com/user-attachments/assets/0589c0df-7675-4e14-afd6-aeccda720511)
+
+
 ## Overview
 MulamuMammba API Manager is a Java-based backend application designed to work alongside a React.js frontend. It allows users to test different APIs while simultaneously creating their own RESTful APIs. Simply plug in the base URL, endpoint, and required parameters to see the response.
 
@@ -12,7 +15,7 @@ MulamuMammba API Manager is a Java-based backend application designed to work al
 
 ## Technologies Used
 - **Backend:** Java, Spring Boot
-- **Frontend:** React.js (not included in this repository)
+- **Frontend:** React.js [(Located at this repo)](https://github.com/MulamuMammba/APIManager-WebClient)
 - **Database:** SQLITE
 - **Security:** Password encryption, email validation
 
